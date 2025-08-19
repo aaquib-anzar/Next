@@ -1,0 +1,75 @@
+Implementing design in the next js . There are 3 ways for this
+ => tailwind CSS  => CSS  => using clsx module
+ ==for tailwind we can directly write as inline.
+ ==for CSS module create a module.css (app/ui/any.module.css)
+        ex: 
+            .shape{
+                width: 0;
+                height:0;
+                border-left : 15px solid transparent;
+                border-right : 15px solid transparent;
+                border-bottom: 25px solid black;
+            }   
+        import styles from "@/app/ui/any.module.css"
+        <div className = {styles.shape} />
+ == clsx module are used when we used conditonal styling
+        ex: <div className = {clsx('inline-flex items-center rounded-full px-2 py-1 text-sm',
+            {
+            'bg-gray-100 text-gray-500': status === 'pending',
+            'bg-green-500 text-white': status === 'paid',
+            },
+            )}
+
+Custom font
+    Custom font in your project might affect your performance if the fonts files need to be f
+    fetched and loaded.
+    to minimise this issue Next.js comes up with a next/font module which downloads the font 
+    files during the build time and host with the static assests. So when the user uses the
+    application there is no other network request.
+
+    usage:
+      app/ui/fonts.ts
+        import {Inter, Lusitana} from "next/font/google"
+
+        export const inter = Inter({subsets:['latin']}) 
+
+        className={`${inter.className} antialiased`}
+
+Why Optimize Image
+    Issues with <img>
+    .Ensure your image is responsive on different screen sizes.
+    .Specify image sizes for different devices.
+    .Prevent layout shift as the images load.
+    .Lazy load images that are outside the user's viewport.
+
+    The <Image> Component is an extension of the HTML <img> tag, and comes with automatic image optimization, such as:
+
+    .Preventing layout shift automatically when images are loading.
+    .Resizing images to avoid shipping large images to devices with a smaller viewport.
+    .Lazy loading images by default (images load as they enter the viewport).
+    .Serving images in modern formats, like WebP and AVIF, when the browser supports it.
+
+    usage:
+        import Image from 'next/image';
+        <Image
+            src="/hero-desktop.png"
+            width={1000}
+            height={760}
+            className="hidden md:block"
+            alt="Screenshots of the dashboard project showing desktop version"
+        />
+
+    Nested Routing
+    Nextjs uses file system based Routing where folders are used to create nested Routes.
+    ->app
+        ->dashboard
+            ->page.tsx //Responsible for the content on the Route /dashboard
+            ->layout.tsx // Responsible for the layout that is shared among the nested components including the nested components.
+            ->invoices
+                ->page.tsx
+    url:localhost:3000/dashboard/invoices
+
+    Partial Rendering
+        One benefit of using layouts in Next.js is that on navigation, only the page components 
+        update while the layout won't re-render. This is called partial rendering which 
+        preserves client-side React state in the layout when transitioning between pages.
